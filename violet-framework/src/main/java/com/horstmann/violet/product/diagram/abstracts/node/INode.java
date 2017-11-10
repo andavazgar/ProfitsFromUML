@@ -25,11 +25,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.horstmann.violet.product.diagram.abstracts.ConnectedEdgeListener;
 import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.product.diagram.abstracts.IIdentifiable;
+import com.horstmann.violet.product.diagram.abstracts.NodeRelation; // import NodeRelation
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
 
 /**
@@ -204,4 +206,16 @@ public interface INode extends Serializable, Cloneable, IIdentifiable, Connected
      * @return a deep copy of this object
      */
     INode clone();
+    
+    void resetRelationArr(); // resetRelationArr is defined here so that AbstractNode/ClassNode can overwrite it
+    
+    void setupRelationArr(); // setupRelationArr is defined here so that AbstractNode/ClassNode can overwrite it
+    
+	void addRelation(NodeRelation relation); // addRelation is defined here so that AbstractNode/ClassNode can overwrite it
+	
+	ArrayList<NodeRelation> getRelationArr(); // getRelationArr is defined here so that AbstractNode/ClassNode can overwrite it 
+	
+	Boolean searchRelation(INode node, String relationship); // searchRelation is defined here so that AbstractNode/ClassNode can overwrite it 
+	
+	int sizeOfRelationArr();	// sizeOfRelationArr is defined here so that AbstractNode/ClassNode can overwrite it 
 }

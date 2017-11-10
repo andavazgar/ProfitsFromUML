@@ -34,6 +34,9 @@ import java.util.List;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.common.node.NoteNode;
+import com.horstmann.violet.product.diagram.abstracts.NodeRelation; // import class NodeRelation
+import com.horstmann.violet.framework.file.DisplayWarning;
+
 
 /**
  * A graph consisting of selectable node and edges.
@@ -370,8 +373,141 @@ public abstract class AbstractGraph implements Serializable, Cloneable, IGraph
     {
         this.gridSticker = positionCorrector;
     }
+    
+    
+    // A function to detect whether the constrain exist in the class diagram
+    public void constrainDetect()
+    {
+    	//System.out.println("num of edges: " + edges.size()); // only for test purpose
+    	//System.out.println("num of nodes: " + nodes.size()); // only for test purpose
+    	
+    	// Record all the relations between all nodes in the class diagram
+    	for(IEdge iedge : edges)
+    	{ 
+    	    String edgeMessage = iedge.getClass().toString();
+    	    int position =  edgeMessage.indexOf("edge");
+    	    String edgeType = edgeMessage.substring(position + 5);
+    	    
+    		if(edgeType.equals("CompositionEdge") || edgeType.equals("AggregationEdge") || edgeType.equals("InheritanceEdge"))
+    		{
+    			INode startNode = iedge.getStartNode();
+    			INode endNode = iedge.getEndNode();
+    			
+    			NodeRelation relation = new NodeRelation(edgeType, endNode);
+    			startNode.setupRelationArr(); // initialize the relation array
+    			startNode.addRelation(relation);
+    		}
+    	}
+    	
+    	// Start checking the constrain for each node
+    	for(INode node : nodes)
+    	{
+    		relations = node.getRelationArr();
+    		
+    		if(relations != null)
+    		{
+        		// Test 1: check if a class has multiple different recursive relationships
+        		int compositionCtr = 0;
+        		int aggregationCtr = 0;
+        		
+        		for(NodeRelation relationship : relations)
+        		{
+        			// test1 : starts
+        			if(relationship.getNode().getId() == node.getId())
+        			{
+        				if(relationship.getRelation().equals("CompositionEdge"))
+        					compositionCtr++;
+        					
+        				if(relationship.getRelation().equals("AggregationEdge"))
+        					aggregationCtr++;
+        			}
+        			// end of test1
+        			
 
-    private ArrayList<INode> nodes;
+        			// test2 & test3: starts
+        			if(relationship.getNode().getId() != node.getId())
+        			{
+        				// if the node at the other side of the edge also has the same relationship with the current node
+        				if(relationship.getNode().searchRelation(node, relationship.getRelation()))
+        				{
+        					if(relationship.getRelation().equals("AggregationEdge"))
+        					{
+            					String notifMessage = "Node: [" + node + "] "
+            							+ "has bidirection aggregation relationship with Node: [" 
+            							+ relationship.getNode() + "]"; 
+            					notification = notification + notifMessage + "\n";
+        					}
+        					
+        					if(relationship.getRelation().equals("CompositionEdge"))
+        					{
+        						String notifMessage = "Node: [" + node + "] "
+        								+ "has bidirection composition relationship with Node: [" 
+        								+ relationship.getNode() + "]";
+            					notification = notification + notifMessage + "\n";
+        					}
+        					
+        					if(relationship.getRelation().equals("InheritanceEdge"))
+        					{
+        						if(node.searchRelation(relationship.getNode(), "CompositionEdge") || relationship.getNode().searchRelation(node, "CompositionEdge"))
+        						{
+        	 						String notifMessage = "Node: [" + node + "] "
+            								+ "has bidirection inheritance with composite relationship with Node: [" 
+            								+ relationship.getNode() + "]";
+                					notification = notification + notifMessage + "\n";
+        						}
+        					}
+        				}
+        			}
+        			// end of test2 & test3
+        			
+        		}
+        		
+        		// test1 : result analysis
+    			if(compositionCtr + aggregationCtr > 1)
+    			{
+    				if(compositionCtr == 0)
+    				{
+    					String noficationMessage = "Node: [" + node + "] has multiple aggregation relationships";
+    					notification = notification + noficationMessage + "\n";
+    				}
+    				else if(aggregationCtr == 0)
+    				{
+    					String noficationMessage = "Node: [" + node + "] has multiple composition relationships";
+    					notification = notification + noficationMessage + "\n";
+    				}
+    				else
+    				{
+    					String noficationMessage = "Node: [" + node + "] has both aggregation and compostion relationships";
+    					notification = notification + noficationMessage + "\n";
+    				}
+    			}
+        	
+        	}
+    		
+    	}
+
+    	// generate the detection result
+    	if(notification.equals(""))
+    	{
+    		this.notification = "There is no constrain detected in the class diagram";
+    	}
+    	
+    	//System.out.println(notification); // print out the notification message
+    	DisplayWarning.DisplayDetectionMessage("Warning", notification);
+    	
+    	// reset all the relations array in each node
+    	for(INode node : nodes)
+    	{
+    		node.resetRelationArr();
+    	}
+    	
+    	notification = "";
+    }
+    
+    private ArrayList<NodeRelation> relations; // declare relations
+    private String notification = ""; // declare notification
+    
+	private ArrayList<INode> nodes;
     private ArrayList<IEdge> edges;
     private transient Rectangle2D minBounds;
     private transient IGridSticker gridSticker;
