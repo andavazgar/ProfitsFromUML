@@ -152,6 +152,8 @@ public class GraphFile implements IGraphFile
     @Override
     public void saveToNewLocation()
     {
+    	//this.graph.constrainDetect(); // call the constrainDetect function here
+    	
         try
         {
             IFileWriter fileSaver = getFileSaver(true);

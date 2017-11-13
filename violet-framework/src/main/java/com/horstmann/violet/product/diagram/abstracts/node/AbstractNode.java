@@ -36,6 +36,7 @@ import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.product.diagram.abstracts.Id;
 import com.horstmann.violet.product.diagram.abstracts.NodeRelation;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
+import com.horstmann.violet.product.diagram.property.text.LineText;
 
 /**
  * A class that supplies convenience implementations for a number of methods in the Node interface
@@ -460,6 +461,8 @@ public abstract class AbstractNode implements INode
     
   //----------------------------------------------------------------------------------------------
 	
+    public abstract LineText getName(); 
+    
   	public ArrayList<NodeRelation> relations; // Relation array to record the relations a node have
   	
   	// function that 

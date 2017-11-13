@@ -38,6 +38,7 @@ import com.horstmann.violet.product.diagram.abstracts.NodeRelation; // import cl
 import com.horstmann.violet.framework.file.DisplayWarning;
 
 
+
 /**
  * A graph consisting of selectable node and edges.
  */
@@ -430,19 +431,26 @@ public abstract class AbstractGraph implements Serializable, Cloneable, IGraph
         				// if the node at the other side of the edge also has the same relationship with the current node
         				if(relationship.getNode().searchRelation(node, relationship.getRelation()))
         				{
+    						String nodeName1 = node.getName().toString();
+    						String nodeName2 = relationship.getNode().getName().toString();
+    		    			if(nodeName1.length() == 0)
+    		    				nodeName1 = "unNamedClass";
+    		    			if(nodeName2.length() == 0)
+    		    				nodeName2 = "unNamedClass";
+    		    			
         					if(relationship.getRelation().equals("AggregationEdge"))
         					{
-            					String notifMessage = "Node: [" + node + "] "
+            					String notifMessage = "Node: [" + nodeName1 + "] "
             							+ "has bidirection aggregation relationship with Node: [" 
-            							+ relationship.getNode() + "]"; 
+            							+ nodeName2 + "]"; 
             					notification = notification + notifMessage + "\n";
         					}
         					
         					if(relationship.getRelation().equals("CompositionEdge"))
         					{
-        						String notifMessage = "Node: [" + node + "] "
+        						String notifMessage = "Node: [" + nodeName1 + "] "
         								+ "has bidirection composition relationship with Node: [" 
-        								+ relationship.getNode() + "]";
+        								+ nodeName2 + "]";
             					notification = notification + notifMessage + "\n";
         					}
         					
@@ -450,9 +458,9 @@ public abstract class AbstractGraph implements Serializable, Cloneable, IGraph
         					{
         						if(node.searchRelation(relationship.getNode(), "CompositionEdge") || relationship.getNode().searchRelation(node, "CompositionEdge"))
         						{
-        	 						String notifMessage = "Node: [" + node + "] "
+        	 						String notifMessage = "Node: [" + nodeName1 + "] "
             								+ "has bidirection inheritance with composite relationship with Node: [" 
-            								+ relationship.getNode() + "]";
+            								+ nodeName2 + "]";
                 					notification = notification + notifMessage + "\n";
         						}
         					}
@@ -465,19 +473,23 @@ public abstract class AbstractGraph implements Serializable, Cloneable, IGraph
         		// test1 : result analysis
     			if(compositionCtr + aggregationCtr > 1)
     			{
+					String nodeName = node.getName().toString();
+	    			if(nodeName.length() == 0)
+	    				nodeName = "unNamedClass";
+	    			
     				if(compositionCtr == 0)
     				{
-    					String noficationMessage = "Node: [" + node + "] has multiple aggregation relationships";
+    					String noficationMessage = "Node: [" + nodeName + "] has multiple aggregation relationships";
     					notification = notification + noficationMessage + "\n";
     				}
     				else if(aggregationCtr == 0)
     				{
-    					String noficationMessage = "Node: [" + node + "] has multiple composition relationships";
+    					String noficationMessage = "Node: [" + nodeName + "] has multiple composition relationships";
     					notification = notification + noficationMessage + "\n";
     				}
     				else
     				{
-    					String noficationMessage = "Node: [" + node + "] has both aggregation and compostion relationships";
+    					String noficationMessage = "Node: [" + nodeName + "] has both aggregation and compostion relationships";
     					notification = notification + noficationMessage + "\n";
     				}
     			}
