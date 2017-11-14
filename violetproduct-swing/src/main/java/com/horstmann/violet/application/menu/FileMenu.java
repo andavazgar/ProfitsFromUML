@@ -31,9 +31,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.Comparator;
 import java.util.List;
@@ -71,6 +69,7 @@ import com.horstmann.violet.framework.userpreferences.UserPreferencesService;
 import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.workspace.IWorkspace;
 import com.horstmann.violet.workspace.Workspace;
+import com.statistics.classModel.StatisticsClassModel;
 import com.thoughtworks.xstream.io.StreamException;
 
 /**
@@ -351,6 +350,28 @@ public class FileMenu extends JMenu
                     IGraphFile graphFile = workspace.getGraphFile();
                     graphFile.save();
                     userPreferencesService.addRecentFile(graphFile);
+    
+                    // Generate Statistical file
+                    if (graphFile.getGraph().getClass().getName() == "com.horstmann.violet.product.diagram.classes.ClassDiagramGraph") {
+                        String filePath = "diagram-statistics/StatisticsFiles/" + graphFile.getFilename();
+                        filePath = filePath.substring(0, filePath.indexOf("."));
+                        filePath += ".statistics.json";
+//                        String filePath = "diagram-statistics/StatisticsFiles/stats.txt";
+                        
+                        StatisticsClassModel statistics = new StatisticsClassModel((GraphFile) graphFile);
+                        String json = statistics.generateStatistics();
+                        
+                        try {
+                                File file = new File(filePath);
+                                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                                BufferedWriter bw = new BufferedWriter(fw);
+                                bw.write(json);
+                                bw.close();
+                        }
+                        catch(IOException ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
                 }
             }
         });

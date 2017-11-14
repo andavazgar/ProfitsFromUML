@@ -25,6 +25,8 @@ target/
 
 ## Directory-based project format:
 .idea/
+
+# Mac File #
+.DS_Store
+
 # if you remove the above rule, at least ignore the following:
-
-

@@ -19,11 +19,6 @@
 			<version>${applicationVersion}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.horstmann.violet</groupId>
-			<artifactId>violetplugin-classdiagram</artifactId>
-			<version>${applicationVersion}</version>
-		</dependency>
-		<dependency>
  			<groupId>com.horstmann.violet</groupId>
  			<artifactId>violetplugin-communicationdiagram</artifactId>
  			<version>${applicationVersion}</version>
@@ -52,6 +47,11 @@
 			<groupId>com.horstmann.violet</groupId>
 			<artifactId>violetplugin-objectdiagram</artifactId>
 			<version>${applicationVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.horstmann.violet</groupId>
+			<artifactId>diagram-statistics</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 	<build>
