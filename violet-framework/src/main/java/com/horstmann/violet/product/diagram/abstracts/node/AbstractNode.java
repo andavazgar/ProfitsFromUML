@@ -34,7 +34,9 @@ import com.horstmann.violet.product.diagram.abstracts.AbstractGraph;
 import com.horstmann.violet.product.diagram.abstracts.Direction;
 import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.product.diagram.abstracts.Id;
+import com.horstmann.violet.product.diagram.abstracts.NodeRelation;
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
+import com.horstmann.violet.product.diagram.property.text.LineText;
 
 /**
  * A class that supplies convenience implementations for a number of methods in the Node interface
@@ -64,6 +66,9 @@ public abstract class AbstractNode implements INode
         this.revision = new Integer(0);
         this.location = new Point2D.Double(0, 0);
         this.children = new ArrayList<INode>();
+        
+        //this.relations = new ArrayList<NodeRelation>(); // declare a NodeRelation array
+        //System.out.println("AbstractNode Constructor");
     }
 
     /**
@@ -453,7 +458,65 @@ public abstract class AbstractNode implements INode
     {
         this.content = content;
     }
-
+    
+  //----------------------------------------------------------------------------------------------
+	
+    public abstract LineText getName(); 
+    
+  	public ArrayList<NodeRelation> relations; // Relation array to record the relations a node have
+  	
+  	// function that 
+  	public void resetRelationArr()
+  	{
+  		relations.clear();
+  	}
+  	
+  	// function that initialize the relations array
+  	public void setupRelationArr()
+  	{
+  		if(relations == null)
+  		{
+  			this.relations = new ArrayList<NodeRelation>();
+  		}
+  	}
+  	
+    // function that adds the relation a node has (overwrite the one defined in INode)
+    public void addRelation(NodeRelation relation)
+    {
+      	this.relations.add(relation);
+    }
+      
+    // function that return the size of the array
+    public int sizeOfRelationArr()
+    {
+      	return relations.size();
+    }
+      
+    // function that return the relation array
+    public ArrayList<NodeRelation> getRelationArr()
+    {
+      	return this.relations;
+    }
+      
+    // function that search for a specific relation that a node has
+    public Boolean searchRelation(INode node, String relationship)
+    {
+    	if(relations != null)
+    	{
+          	for (NodeRelation re : relations)
+          	{
+          		if(re.getNode().getId() == node.getId() && re.getRelation().equals(relationship))
+          		{
+          			return true;
+          		}
+          	}
+    	}
+    	
+      	return false;
+    }
+      
+    //---------------------------------------------------------------------------------------
+    
     private transient Content content;
 
     private transient IGraph graph;

@@ -156,5 +156,7 @@ public interface IGraph
      */
     public void setGridSticker(IGridSticker newCorrector);
     
+    // for test purpose, declare a function called constrainDetect
+    public abstract void constrainDetect();
     
 }

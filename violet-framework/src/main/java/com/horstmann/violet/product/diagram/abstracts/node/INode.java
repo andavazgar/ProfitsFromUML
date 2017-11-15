@@ -25,12 +25,15 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.horstmann.violet.product.diagram.abstracts.ConnectedEdgeListener;
 import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.product.diagram.abstracts.IIdentifiable;
+import com.horstmann.violet.product.diagram.abstracts.NodeRelation; // import NodeRelation
 import com.horstmann.violet.product.diagram.abstracts.edge.IEdge;
+import com.horstmann.violet.product.diagram.property.text.LineText;
 
 /**
  * A node_old in a graph. To be more precise, a node_old is an graphical entity that represents a class, a sequence, a state or all other
@@ -204,4 +207,18 @@ public interface INode extends Serializable, Cloneable, IIdentifiable, Connected
      * @return a deep copy of this object
      */
     INode clone();
+    
+    abstract LineText getName(); // getMethods is defined is defined here so that AbstractNode/ClassNode can overwrite it
+    
+    void resetRelationArr(); // resetRelationArr is defined here so that AbstractNode/ClassNode can overwrite it
+    
+    void setupRelationArr(); // setupRelationArr is defined here so that AbstractNode/ClassNode can overwrite it
+    
+	void addRelation(NodeRelation relation); // addRelation is defined here so that AbstractNode/ClassNode can overwrite it
+	
+	ArrayList<NodeRelation> getRelationArr(); // getRelationArr is defined here so that AbstractNode/ClassNode can overwrite it 
+	
+	Boolean searchRelation(INode node, String relationship); // searchRelation is defined here so that AbstractNode/ClassNode can overwrite it 
+	
+	int sizeOfRelationArr();	// sizeOfRelationArr is defined here so that AbstractNode/ClassNode can overwrite it 
 }
