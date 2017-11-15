@@ -1,0 +1,22 @@
+{
+  "diagramName": "universityClass.class.violet.html",
+  "numOfClasses": 3,
+  "numOfRelationships": 2,
+  "classes": {
+    "Employee": {
+      "attributes": 2,
+      "methods": 2,
+      "CBO": 1
+    },
+    "Student": {
+      "attributes": 2,
+      "methods": 3,
+      "CBO": 1
+    },
+    "Person": {
+      "attributes": 3,
+      "methods": 3,
+      "CBO": 0
+    }
+  }
+}
