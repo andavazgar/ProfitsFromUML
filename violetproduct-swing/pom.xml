@@ -53,6 +53,11 @@
 			<artifactId>diagram-statistics</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.horstmann.violet</groupId>
+			<artifactId>constraint-detection</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>violetumleditor-${project.version}</finalName>

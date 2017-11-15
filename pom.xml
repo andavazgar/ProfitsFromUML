@@ -24,7 +24,8 @@
 		<module>violetproduct-deb</module>
 		<module>violetproduct-web</module>
 		<module>diagram-statistics</module>
-	</modules>
+        <module>constraint-detection</module>
+    </modules>
 	<properties>
 		<applicationVersion>2.5.3</applicationVersion>
 	</properties>
