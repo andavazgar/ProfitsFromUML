@@ -70,6 +70,7 @@ import com.horstmann.violet.product.diagram.abstracts.IGraph;
 import com.horstmann.violet.workspace.IWorkspace;
 import com.horstmann.violet.workspace.Workspace;
 import com.statistics.classModel.StatisticsClassModel;
+import com.constraints.classModel.CheckClassModelConstraints;
 import com.thoughtworks.xstream.io.StreamException;
 
 /**
@@ -353,7 +354,13 @@ public class FileMenu extends JMenu
     
                     // Generate Statistical file
                     if (graphFile.getGraph().getClass().getName() == "com.horstmann.violet.product.diagram.classes.ClassDiagramGraph") {
-                        String filePath = "diagram-statistics/StatisticsFiles/" + graphFile.getFilename();
+                        
+                    	//-------------------------start constraint detection-------------------------------//
+                    	CheckClassModelConstraints ccmc = new CheckClassModelConstraints((GraphFile) graphFile);
+                    	ccmc.constraintDetect();
+                    	//-------------------------end of the constraint detection--------------------------//
+                    	
+                    	String filePath = "diagram-statistics/StatisticsFiles/" + graphFile.getFilename();
                         filePath = filePath.substring(0, filePath.indexOf("."));
                         filePath += ".statistics.json";
 //                        String filePath = "diagram-statistics/StatisticsFiles/stats.txt";

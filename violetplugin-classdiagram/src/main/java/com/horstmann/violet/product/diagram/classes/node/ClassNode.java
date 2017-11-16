@@ -15,12 +15,15 @@ import com.horstmann.violet.product.diagram.abstracts.node.ColorableNode;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.property.text.MultiLineText;
 import com.horstmann.violet.product.diagram.property.text.SingleLineText;
+import com.horstmann.violet.product.diagram.classes.node.NodeRelation;
+
 
 /**
  * A class node in a class diagram.
  */
 public class ClassNode extends ColorableNode
 {
+	
 	/**
      * Construct a class node with a default size
      */
@@ -258,4 +261,61 @@ public class ClassNode extends ColorableNode
             return lineString;
         }
     };
+    
+    
+  //----------------------------------------------------------------------------------------------
+    
+  	public ArrayList<NodeRelation> relations; // Relation array to record the relations a node have
+  	
+  	// function that 
+  	public void resetRelationArr()
+  	{
+  		relations.clear();
+  	}
+  	
+  	// function that initialize the relations array
+  	public void setupRelationArr()
+  	{
+  		if(relations == null)
+  		{
+  			this.relations = new ArrayList<NodeRelation>();
+  		}
+  	}
+  	
+    // function that adds the relation a node has (overwrite the one defined in INode)
+    public void addRelation(NodeRelation relation)
+    {
+      	this.relations.add(relation);
+    }
+      
+    // function that return the size of the array
+    public int sizeOfRelationArr()
+    {
+      	return relations.size();
+    }
+      
+    // function that return the relation array
+    public ArrayList<NodeRelation> getRelationArr()
+    {
+      	return this.relations;
+    }
+      
+    // function that search for a specific relation that a node has
+    public Boolean searchRelation(INode node, String relationship)
+    {
+    	if(relations != null)
+    	{
+          	for (NodeRelation re : relations)
+          	{
+          		if(re.getNode().getId() == node.getId() && re.getRelation().equals(relationship))
+          		{
+          			return true;
+          		}
+          	}
+    	}
+    	
+      	return false;
+    }
+      
+    //---------------------------------------------------------------------------------------
 }

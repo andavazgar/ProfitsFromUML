@@ -1,24 +1,24 @@
-package com.constraints.classModel;
+package com.horstmann.violet.product.diagram.classes.node;
 
-import com.horstmann.violet.product.diagram.abstracts.node.INode;
+import com.horstmann.violet.product.diagram.classes.node.ClassNode;
 
 // An inner class Relation is declared so that AbstractNode and AbstractGraph can
 // use it to implement the constrain detection
 public class NodeRelation 
 {
 	private String relation = null;
-	private INode node = null;
+	private ClassNode node = null;
 	
 	public NodeRelation()
 	{}
 	
-	public NodeRelation(String relation, INode node)
+	public NodeRelation(String relation, ClassNode node)
 	{
 		this.relation = relation;
 		this.node = node;
 	}
 
-	public INode getNode()
+	public ClassNode getNode()
 	{
 		return this.node;
 	}
