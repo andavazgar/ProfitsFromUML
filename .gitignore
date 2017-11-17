@@ -30,4 +30,7 @@ target/
 # Mac File #
 .DS_Store
 
+# Statistical Files (Class Model)
+diagram-statistics/StatisticsFiles/
+
 # if you remove the above rule, at least ignore the following:

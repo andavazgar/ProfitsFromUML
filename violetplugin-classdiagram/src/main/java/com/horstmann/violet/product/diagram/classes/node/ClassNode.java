@@ -15,7 +15,6 @@ import com.horstmann.violet.product.diagram.abstracts.node.ColorableNode;
 import com.horstmann.violet.product.diagram.abstracts.node.INode;
 import com.horstmann.violet.product.diagram.property.text.MultiLineText;
 import com.horstmann.violet.product.diagram.property.text.SingleLineText;
-import com.horstmann.violet.product.diagram.classes.node.NodeRelation;
 
 
 /**
@@ -23,7 +22,6 @@ import com.horstmann.violet.product.diagram.classes.node.NodeRelation;
  */
 public class ClassNode extends ColorableNode
 {
-	
 	/**
      * Construct a class node with a default size
      */
@@ -34,6 +32,7 @@ public class ClassNode extends ColorableNode
         name.setAlignment(LineText.CENTER);
         attributes = new MultiLineText(PROPERTY_CONVERTER);
         methods = new MultiLineText(PROPERTY_CONVERTER);
+        relations = new ArrayList<NodeRelation>();
         createContentStructure();
     }
 
@@ -43,6 +42,7 @@ public class ClassNode extends ColorableNode
         name = node.name.clone();
         attributes = node.attributes.clone();
         methods = node.methods.clone();
+        relations = new ArrayList<NodeRelation>();
         createContentStructure();
     }
 
@@ -188,6 +188,7 @@ public class ClassNode extends ColorableNode
     private SingleLineText name;
     private MultiLineText attributes;
     private MultiLineText methods;
+    private ArrayList<NodeRelation> relations; // Relation array to record the relations a node has
 
     private transient Separator separator;
 
@@ -264,28 +265,17 @@ public class ClassNode extends ColorableNode
     
     
   //----------------------------------------------------------------------------------------------
-    
-  	public ArrayList<NodeRelation> relations; // Relation array to record the relations a node have
   	
-  	// function that 
-  	public void resetRelationArr()
+  	// function that resets the node's relations array
+  	public void resetRelationsArr()
   	{
-  		relations.clear();
-  	}
-  	
-  	// function that initialize the relations array
-  	public void setupRelationArr()
-  	{
-  		if(relations == null)
-  		{
-  			this.relations = new ArrayList<NodeRelation>();
-  		}
+        relations.clear();
   	}
   	
     // function that adds the relation a node has (overwrite the one defined in INode)
     public void addRelation(NodeRelation relation)
     {
-      	this.relations.add(relation);
+        relations.add(relation);
     }
       
     // function that return the size of the array
@@ -295,9 +285,9 @@ public class ClassNode extends ColorableNode
     }
       
     // function that return the relation array
-    public ArrayList<NodeRelation> getRelationArr()
+    public ArrayList<NodeRelation> getRelationsArr()
     {
-      	return this.relations;
+      	return relations;
     }
       
     // function that search for a specific relation that a node has

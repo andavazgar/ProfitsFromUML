@@ -363,7 +363,6 @@ public class FileMenu extends JMenu
                     	String filePath = "diagram-statistics/StatisticsFiles/" + graphFile.getFilename();
                         filePath = filePath.substring(0, filePath.indexOf("."));
                         filePath += ".statistics.json";
-//                        String filePath = "diagram-statistics/StatisticsFiles/stats.txt";
                         
                         StatisticsClassModel statistics = new StatisticsClassModel((GraphFile) graphFile);
                         String json = statistics.generateStatistics();
@@ -374,6 +373,7 @@ public class FileMenu extends JMenu
                                 BufferedWriter bw = new BufferedWriter(fw);
                                 bw.write(json);
                                 bw.close();
+                                fw.close();
                         }
                         catch(IOException ex){
                             System.out.println(ex.getMessage());
