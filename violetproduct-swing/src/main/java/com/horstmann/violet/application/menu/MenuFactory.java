@@ -88,7 +88,7 @@ public class MenuFactory
 
     /**
      * @param editorFrame
-     * @return window menu
+     * @return document menu
      */    
     public DocumentMenu getDocumentMenu(MainFrame editorFrame)
     {
@@ -98,11 +98,25 @@ public class MenuFactory
         }
         return this.documentMenu;
     }
+    
+    /**
+     * @param editorFrame
+     * @return admin menu
+     */
+    public AdminMenu getAdminMenu(MainFrame editorFrame)
+    {
+        if (this.adminMenu == null)
+        {
+            this.adminMenu = new AdminMenu(editorFrame);
+        }
+        return this.adminMenu;
+    }
 
     private EditMenu editMenu;
     private FileMenu fileMenu;
     private HelpMenu helpMenu;
     private ViewMenu viewMenu;
     private DocumentMenu documentMenu;
+    private AdminMenu adminMenu;
 
 }
