@@ -1,72 +1,105 @@
-/*
- Violet - A program for editing UML diagrams.
-
- Copyright (C) 2007 Cay S. Horstmann (http://horstmann.com)
- Alexandre de Pellegrin (http://alexdp.free.fr);
-
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program; if not, write to the Free Software
- Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
 package com.horstmann.violet.application.admin;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.util.Arrays;
+import java.util.Scanner;
 
-/**
- * Login dialog
- *
- * @author Andres Vazquez
- */
-public class LoginDialog extends JDialog
-{
-    private String dialogTitle = "Login";
+public class LoginDialog extends JDialog {
     
-    private String username = "Username";
-    
-    private String password = "Password";
-    
-    private JButton loginButton = new JButton();
-    
-    private JPanel loginPanel;
+    private JTextField textField;
+    private JPasswordField passwordField;
+    private String filepath = "violetproduct-swing/src/main/java/com/horstmann/violet/application/admin/LoginCredentialFile.txt";
     
     /**
-     * Default constructor of LoginDialog
-     *
-     * @param parent JFrame parent
+     * Create the application.
      */
     public LoginDialog(JFrame parent) {
         super(parent);
+        
+        initialize();
+        setCenterLocation(parent);
+    }
     
-        this.getContentPane().setSize(800,400);
-        this.setTitle(dialogTitle);
+    /**
+     * Initialize the contents of the frame.
+     */
+    private void initialize() {
+        this.setTitle("Login");
         this.setLocationRelativeTo(null);
         this.setModal(true);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        this.getContentPane().setLayout(new BorderLayout());
-        this.getContentPane().add(buildLoginPanel(), BorderLayout.CENTER);
-        pack();
-        setCenterLocation(parent);
+        this.setBounds(100, 100, 450, 300);
+        this.getContentPane().setLayout(null);
+        
+        JLabel lblUsername = new JLabel("Username:");
+        lblUsername.setBounds(90, 70, 82, 23);
+        this.getContentPane().add(lblUsername);
+        
+        textField = new JTextField();
+        textField.setBounds(165, 70, 206, 23);
+        this.getContentPane().add(textField);
+        textField.setColumns(10);
+        
+        JLabel lblPassword = new JLabel("Password:");
+        lblPassword.setBounds(90, 105, 82, 23);
+        this.getContentPane().add(lblPassword);
+        
+        passwordField = new JPasswordField();
+        passwordField.setBounds(165, 105, 206, 23);
+        this.getContentPane().add(passwordField);
+        
+        JButton btnLogin = new JButton("Login");
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                if (verifyLogin(textField, passwordField, filepath)) {
+                    JOptionPane.showMessageDialog(null, "Successfully logged in!");
+                    dispose();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Error: incorrect username and/or password.");
+                }
+            }
+        });
+        btnLogin.setBounds(40, 176, 89, 23);
+        this.getContentPane().add(btnLogin);
+        
+        JButton btnCancel = new JButton("Cancel");
+        btnCancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                dispose();
+            }
+        });
+        btnCancel.setBounds(318, 176, 89, 23);
+        this.getContentPane().add(btnCancel);
     }
     
-    private JPanel buildLoginPanel() {
-        if (loginPanel == null) {
-            loginPanel = new JPanel(new BorderLayout());
-            loginPanel.setPreferredSize(new Dimension(600, 400));
+    private static boolean verifyLogin(JTextField username, JPasswordField password, String filepath) {
+        boolean loginInfoFound = false;
+        String temporaryUsername = "";
+        String temporaryPassword = "";
+        
+        try {
+            Scanner input = new Scanner(new File(filepath));    // Scans the Credential file.
+            input.useDelimiter("[,\n]");                        // Splits up the values.
+            
+            while (input.hasNext() && !loginInfoFound) {        // Loops until the username and password are correct.
+                temporaryUsername = input.next();
+                temporaryPassword = input.next();
+                
+                if (temporaryUsername.trim().equals(username.getText().trim()) && Arrays.equals(temporaryPassword.trim().toCharArray(), password.getPassword())) {
+                    loginInfoFound = true;                        // Username and password are correct!
+                    return true;
+                }
+            }
+            input.close();                            // Closes scanner.
         }
-        return this.loginPanel;
+        catch (Exception e) {            // Returns the error if the username and/or password are wrong.
+            JOptionPane.showMessageDialog(null, "Error: incorrect username and/or password.");
+        }
+        return false;
     }
     
     private void setCenterLocation(JFrame parent) {
